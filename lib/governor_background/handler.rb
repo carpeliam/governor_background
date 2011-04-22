@@ -2,11 +2,12 @@ module GovernorBackground
   class Handler
     class << self
       def run_in_background(object, method)
-        if delayed_job?
-          Delayed::Job.enqueue GovernorBackground::DelayedJob.new(object, method)
+        job = if delayed_job?
+          GovernorBackground::Delayed::JobState.new(Delayed::Job.enqueue(GovernorBackground::Delayed::Job.new(object, method)))
         elsif resque?
-          Resque.enqueue(GovernorBackend::Resque, object, method)
+          GovernorBackground::Resque::JobState.new(Resque.enqueue(GovernorBackground::Resque::Job, object, method))
         end
+        GovernorBackground::JobManager.add_job job
       end
       
       private

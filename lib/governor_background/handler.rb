@@ -5,16 +5,16 @@ module GovernorBackground
         job = if delayed_job?
           Delayed::Job.new(::Delayed::Job.enqueue(Delayed::Performer.new(object, method)))
         elsif resque?
-          resource_key = object.class.name.tableize.to_sym
+          resource_key, id = object.class.name.tableize.to_sym, object.id
           if resque_with_status?
-            require 'resque/performer_with_state'
+            require File.expand_path('../resque/performer_with_state',  __FILE__)
             Resque::Job.new(Resque::PerformerWithState.create(:resource => resource_key, :id => id, :method => method))
           else
-            Resque.enqueue(Resque::Performer, resource_key, id, method)
-            nil # not much use in holding on to state
+            ::Resque.enqueue(Resque::Performer, resource_key, id, method)
+            nil # not much use in holding on to state if we can't track it
           end
         end
-        GovernorBackground::JobManager.add(job) unless job.blank?
+        JobManager.add(job) unless job.blank?
       end
       
       private

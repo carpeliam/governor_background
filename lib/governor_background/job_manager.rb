@@ -1,6 +1,6 @@
 module GovernorBackground
   class JobManager
-    cattr_accessor :jobs
+    cattr_reader :jobs
     class << self
       @@jobs = []
       def add(job)

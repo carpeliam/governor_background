@@ -1,8 +1,9 @@
 require 'governor_background/handler'
 require 'governor_background/job_manager'
 require 'governor_background/delayed/job'
-require 'governor_background/delayed/job_state'
+require 'governor_background/delayed/performer'
 require 'governor_background/resque/job'
+require 'governor_background/resque/performer'
 
 background = Governor::Plugin.new('background')
 

@@ -1,9 +1,14 @@
 module GovernorBackground
   class JobManager
+    cattr_accessor :jobs
     class << self
-      @jobs = []
-      def add_job(job)
-        @jobs << job
+      @@jobs = []
+      def add(job)
+        @@jobs << job
+      end
+      
+      def clean(time = 1.day.ago)
+        @@jobs.reject!{|j| j.created_at < time}
       end
     end
   end

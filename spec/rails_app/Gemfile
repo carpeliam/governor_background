@@ -9,7 +9,8 @@ gem 'sqlite3'
 
 gem 'devise'
 gem 'delayed_job'
-gem 'resque'
+gem 'resque', :require => 'resque/server'
+gem 'resque-status', :require => 'resque/status'
 
 gem 'governor'
 gem 'governor_background', :path => '../..'

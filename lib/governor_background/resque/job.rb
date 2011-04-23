@@ -1,11 +1,12 @@
-module GovernorBackground
+module Governor
   module Resque
     class Job
-      @queue = :governor
-
-      def self.perform(article, method)
-        article.send(method)
+      attr_reader :created_at
+      def initialize(job_id)
+        @id = job_id
+        @created_at = Time.now
       end
+      
     end
   end
 end

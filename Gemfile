@@ -22,5 +22,7 @@ group :development, :test do
   gem 'governor_background', :path => './'
   gem 'delayed_job'
   gem 'resque'
+  gem 'resque-status', :require => 'resque/status'
+  gem 'resque_spec'
   gem 'dynamic_form'
 end

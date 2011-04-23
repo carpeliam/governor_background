@@ -21,5 +21,6 @@ group :development, :test do
   gem 'devise'
   gem 'governor_background', :path => './'
   gem 'delayed_job'
+  gem 'resque'
   gem 'dynamic_form'
 end

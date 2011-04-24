@@ -33,7 +33,7 @@ After that, it's highly recommended that you add some methods to your
       # ...
     end
 
-Including +GovernorBackground::Controllers::Methods+ will upon every request
+Including {GovernorBackground::Controllers::Methods} will upon every request
 check to see if there are any finished jobs (either completed, failed, or
 killed) since the last request, and will both clear them out as well as enable
 you to report them to the user. To report them to the user, add the following
@@ -47,23 +47,23 @@ class, and within that div will be one or more divs with either a 'completed',
 
 == Usage
 
-*governor_background* adds a method +#run_in_background+ to your resource class
+*governor_background* adds a method {#run_in_background} to your resource class
 (by default, the +Article+ class, but this will be any resource class). To do
 the same thing from outside of your resource instance, you can call
-+GovernorBackground::Handler.run_in_background(object, :method_name)+. In
+{GovernorBackground::Handler.run_in_background(object, :method_name)}. In
 order to build on top of *governor_background*, you'll need to do one of two
 things:
 
 1. Call +run_in_background+, either from your resource instance or on
-   +GovernorBackground::Handler+. Pass it an object and the name of the method
+   {GovernorBackground::Handler}. Pass it an object and the name of the method
    (as a symbol) that you wish to call on that object. Arguments to this
    method are not currently supported.
 2. In your I18n settings, define entries for your method, for each finished
    status (completed, failed, and killed). You'll have access in your entry to
    the resource as well as any message passed from the background service.
-   (The default +#to_s+ for Article displays the title, as of Governor 0.3.1.)
+   (The default {#to_s} for Article displays the title, as of Governor 0.3.1.)
    For example, if your method were 'post_to_blogger', you might have the
-   following in your +config/locales/en.yml+ file:
+   following in your {config/locales/en.yml} file:
 
        en:
          governor_background:

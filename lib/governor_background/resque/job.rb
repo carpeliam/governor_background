@@ -1,8 +1,10 @@
 module Governor
   module Resque
     class Job
-      attr_reader :created_at
-      def initialize(job_id)
+      attr_reader :resource, :method_name, :created_at
+      def initialize(resource, method_name, job_id)
+        @resource = resource
+        @method_name = method_name
         @id = job_id
         @created_at = Time.now
       end
@@ -30,6 +32,10 @@ module Governor
       
       def killed?
         proxy :killed?
+      end
+      
+      def message
+        proxy :message, ''
       end
       
       private

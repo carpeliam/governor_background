@@ -8,9 +8,9 @@ module GovernorBackground
       def perform
         resource = options['resource']
         id = options['id']
-        method = options['method']
+        method_name = options['method_name']
         article = Governor.resources[resource].to.find(id)
-        article.send(method)
+        article.send(method_name)
       end
     end
   end

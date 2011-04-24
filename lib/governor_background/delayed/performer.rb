@@ -1,8 +1,8 @@
 module GovernorBackground
   module Delayed
-    class Performer < Struct.new(:article, :method)
+    class Performer < Struct.new(:article, :method_name)
       def perform
-        article.send(method)
+        article.send(method_name)
       end
     
       def error(job, exception)

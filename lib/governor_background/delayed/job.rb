@@ -1,8 +1,10 @@
 module GovernorBackground
   module Delayed
     class Job
-      attr_reader :created_at
-      def initialize(job)
+      attr_reader :resource, :method_name, :created_at
+      def initialize(resource, method_name, job)
+        @resource = resource
+        @method_name = method_name
         @id = job.try(:id)
         @created_at = Time.now
       end
@@ -34,12 +36,18 @@ module GovernorBackground
         return 'working' if job_working?(job)
         return 'completed' if job_completed?(job)
         return 'failed' if job_failed?(job)
-        # etc
+        raise 'Status unknown.' # we should never get here.
+      end
+      
+      def message
+        (job = delayed_job) && job.failed? ?
+          job.last_error.lines.first.chomp.gsub(/^\{/, '') :
+          status.humanize
       end
       
       private
       def delayed_job
-        Delayed::Job.find_by_id(@id)
+        ::Delayed::Job.find_by_id(@id)
       end
       
       def job_queued?(job = delayed_job)

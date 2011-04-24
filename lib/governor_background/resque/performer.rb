@@ -3,9 +3,9 @@ module GovernorBackground
     class Performer
       @queue = :governor
 
-      def self.perform(resource, id, method)
+      def self.perform(resource, id, method_name)
         article = Governor.resources[resource].to.find(id)
-        article.send(method)
+        article.send(method_name)
       end
     end
   end

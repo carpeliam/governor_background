@@ -7,19 +7,55 @@ module GovernorBackground
         @created_at = Time.now
       end
       
-      def successful?
-        delayed_job.nil?
+      def queued?
+        job_queued?
+      end
+      
+      def working?
+        job_working?
+      end
+      
+      def completed?
+        job_completed?
+      end
+      
+      def failed?
+        job_failed?
+      end
+      
+      def killed?
+        # as far as i know, you can't tell if a job has been killed
+        false
       end
       
       def status
-        job = Delayed::Job.find_by_id(@id)
-        return :success if job.nil?
+        job = delayed_job
+        return 'queued' if job_queued?(job)
+        return 'working' if job_working?(job)
+        return 'completed' if job_completed?(job)
+        return 'failed' if job_failed?(job)
         # etc
       end
       
       private
       def delayed_job
         Delayed::Job.find_by_id(@id)
+      end
+      
+      def job_queued?(job = delayed_job)
+        job && !job.locked_at
+      end
+      
+      def job_working?(job = delayed_job)
+        job && job.run_at && job.locked_at && !job.failed?
+      end
+      
+      def job_completed?(job = delayed_job)
+        job.nil?
+      end
+      
+      def job_failed?(job = delayed_job)
+        job && job.failed? && job.attempts == ::Delayed::Worker.max_attempts
       end
     end
   end

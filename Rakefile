@@ -15,8 +15,8 @@ Jeweler::Tasks.new do |gem|
   gem.name = "governor_background"
   gem.homepage = "http://github.com/carpeliam/governor_background"
   gem.license = "MIT"
-  gem.summary = %Q{TODO: one-line summary of your gem}
-  gem.description = %Q{TODO: longer description of your gem}
+  gem.summary = %Q{Background services plugin for the Rails 3-based Governor blogging system.}
+  gem.description = %Q{A middle-tier plugin for the Rails 3-based Governor blogging system, allowing you to tie in additional services that might want to perform blog-related services in the background.}
   gem.email = "liam@carpeliam.com"
   gem.authors = ["Liam Morley"]
   # Include your dependencies below. Runtime dependencies are required when using your gem,

@@ -10,7 +10,7 @@ Gem::Specification.new do |s|
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Liam Morley"]
   s.date = %q{2011-04-24}
-  s.description = %q{TODO: longer description of your gem}
+  s.description = %q{A middle-tier plugin for the Rails 3-based Governor blogging system, allowing you to tie in additional services that might want to perform blog-related services in the background.}
   s.email = %q{liam@carpeliam.com}
   s.extra_rdoc_files = [
     "LICENSE.txt",
@@ -107,7 +107,7 @@ Gem::Specification.new do |s|
   s.licenses = ["MIT"]
   s.require_paths = ["lib"]
   s.rubygems_version = %q{1.3.7}
-  s.summary = %q{TODO: one-line summary of your gem}
+  s.summary = %q{Background services plugin for the Rails 3-based Governor blogging system.}
   s.test_files = [
     "spec/governor_background/delayed/job_spec.rb",
     "spec/governor_background/handler_spec.rb",

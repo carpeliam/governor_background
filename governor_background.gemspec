@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = %q{governor_background}
-  s.version = "0.0.0"
+  s.version = "0.1.0"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Liam Morley"]
-  s.date = %q{2011-04-23}
+  s.date = %q{2011-04-24}
   s.description = %q{TODO: longer description of your gem}
   s.email = %q{liam@carpeliam.com}
   s.extra_rdoc_files = [
@@ -25,12 +25,23 @@ Gem::Specification.new do |s|
     "README.rdoc",
     "Rakefile",
     "VERSION",
+    "app/helpers/governor_background_helper.rb",
     "governor_background.gemspec",
     "lib/governor_background.rb",
+    "lib/governor_background/controllers/methods.rb",
     "lib/governor_background/delayed/job.rb",
+    "lib/governor_background/delayed/performer.rb",
     "lib/governor_background/handler.rb",
     "lib/governor_background/job_manager.rb",
+    "lib/governor_background/rails.rb",
     "lib/governor_background/resque/job.rb",
+    "lib/governor_background/resque/performer.rb",
+    "lib/governor_background/resque/performer_with_state.rb",
+    "spec/governor_background/delayed/job_spec.rb",
+    "spec/governor_background/handler_spec.rb",
+    "spec/governor_background/job_manager_spec.rb",
+    "spec/governor_background/resque/performer_spec.rb",
+    "spec/governor_background/resque/performer_with_state_spec.rb",
     "spec/governor_background_spec.rb",
     "spec/rails_app/.gitignore",
     "spec/rails_app/Gemfile",
@@ -68,6 +79,7 @@ Gem::Specification.new do |s|
     "spec/rails_app/config/routes.rb",
     "spec/rails_app/db/migrate/20110329032256_devise_create_users.rb",
     "spec/rails_app/db/migrate/20110330020108_governor_create_articles.rb",
+    "spec/rails_app/db/migrate/20110421014910_create_delayed_jobs.rb",
     "spec/rails_app/db/schema.rb",
     "spec/rails_app/db/seeds.rb",
     "spec/rails_app/lib/tasks/.gitkeep",
@@ -85,6 +97,7 @@ Gem::Specification.new do |s|
     "spec/rails_app/public/javascripts/rails.js",
     "spec/rails_app/public/robots.txt",
     "spec/rails_app/public/stylesheets/.gitkeep",
+    "spec/rails_app/script/delayed_job",
     "spec/rails_app/script/rails",
     "spec/rails_app/spec/factories.rb",
     "spec/rails_app/vendor/plugins/.gitkeep",
@@ -96,7 +109,11 @@ Gem::Specification.new do |s|
   s.rubygems_version = %q{1.3.7}
   s.summary = %q{TODO: one-line summary of your gem}
   s.test_files = [
+    "spec/governor_background/delayed/job_spec.rb",
+    "spec/governor_background/handler_spec.rb",
     "spec/governor_background/job_manager_spec.rb",
+    "spec/governor_background/resque/performer_spec.rb",
+    "spec/governor_background/resque/performer_with_state_spec.rb",
     "spec/governor_background_spec.rb",
     "spec/rails_app/app/controllers/application_controller.rb",
     "spec/rails_app/app/controllers/home_controller.rb",
@@ -121,6 +138,7 @@ Gem::Specification.new do |s|
     "spec/rails_app/config/routes.rb",
     "spec/rails_app/db/migrate/20110329032256_devise_create_users.rb",
     "spec/rails_app/db/migrate/20110330020108_governor_create_articles.rb",
+    "spec/rails_app/db/migrate/20110421014910_create_delayed_jobs.rb",
     "spec/rails_app/db/schema.rb",
     "spec/rails_app/db/seeds.rb",
     "spec/rails_app/spec/factories.rb",
@@ -143,8 +161,10 @@ Gem::Specification.new do |s|
       s.add_development_dependency(%q<will_paginate>, ["~> 3.0.beta"])
       s.add_development_dependency(%q<devise>, [">= 0"])
       s.add_development_dependency(%q<governor_background>, [">= 0"])
+      s.add_development_dependency(%q<delayed_job>, [">= 0"])
       s.add_development_dependency(%q<resque>, [">= 0"])
       s.add_development_dependency(%q<resque-status>, [">= 0"])
+      s.add_development_dependency(%q<resque_spec>, [">= 0"])
       s.add_development_dependency(%q<dynamic_form>, [">= 0"])
     else
       s.add_dependency(%q<governor>, [">= 0"])
@@ -158,8 +178,10 @@ Gem::Specification.new do |s|
       s.add_dependency(%q<will_paginate>, ["~> 3.0.beta"])
       s.add_dependency(%q<devise>, [">= 0"])
       s.add_dependency(%q<governor_background>, [">= 0"])
+      s.add_dependency(%q<delayed_job>, [">= 0"])
       s.add_dependency(%q<resque>, [">= 0"])
       s.add_dependency(%q<resque-status>, [">= 0"])
+      s.add_dependency(%q<resque_spec>, [">= 0"])
       s.add_dependency(%q<dynamic_form>, [">= 0"])
     end
   else
@@ -174,8 +196,10 @@ Gem::Specification.new do |s|
     s.add_dependency(%q<will_paginate>, ["~> 3.0.beta"])
     s.add_dependency(%q<devise>, [">= 0"])
     s.add_dependency(%q<governor_background>, [">= 0"])
+    s.add_dependency(%q<delayed_job>, [">= 0"])
     s.add_dependency(%q<resque>, [">= 0"])
     s.add_dependency(%q<resque-status>, [">= 0"])
+    s.add_dependency(%q<resque_spec>, [">= 0"])
     s.add_dependency(%q<dynamic_form>, [">= 0"])
   end
 end

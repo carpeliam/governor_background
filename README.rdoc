@@ -1,6 +1,78 @@
 = governor_background
 
-Description goes here.
+*Governor[http://carpeliam.github.com/governor/]* (named after Rod
+Blagojevich) is the pluggable blogging platform for Rails, built for people
+who want to build their blog into their website, not build their website into
+their blog.
+
+*governor_background* is a middle-tier plugin for Governor, allowing you to
+tie in additional services that might want to perform blog-related services in
+the background. For example, you may want to copy your articles to another
+blog service, like Blogger.
+
+== Dependencies
+
+* Governor[http://carpeliam.github.com/governor/]
+* Either Delayed_Job[https://github.com/collectiveidea/delayed_job] or
+  Resque[https://github.com/defunkt/resque]. If you use Resque, it's highly
+  recommended that you use
+  resque-status[https://github.com/quirkey/resque-status] as well.
+
+== Setting up
+
+First, install Governor[http://carpeliam.github.com/governor/]. Then, in
+your Gemfile, add the following:
+
+    gem 'governor_background'
+
+After that, it's highly recommended that you add some methods to your
++ApplicationController+ as follows:
+
+    class ApplicationController < ActionController::Base
+      include GovernorBackground::Controllers::Methods
+      # ...
+    end
+
+Including +GovernorBackground::Controllers::Methods+ will upon every request
+check to see if there are any finished jobs (either completed, failed, or
+killed) since the last request, and will both clear them out as well as enable
+you to report them to the user. To report them to the user, add the following
+to your layout:
+
+    <%= background_status %>
+
+If there are any finished jobs, this will add a +div+ with a 'background'
+class, and within that div will be one or more divs with either a 'completed',
+'failed', or 'killed' class, and a message.
+
+== Usage
+
+*governor_background* adds a method +#run_in_background+ to your resource class
+(by default, the +Article+ class, but this will be any resource class). To do
+the same thing from outside of your resource instance, you can call
++GovernorBackground::Handler.run_in_background(object, :method_name)+. In
+order to build on top of *governor_background*, you'll need to do one of two
+things:
+
+1. Call +run_in_background+, either from your resource instance or on
+   +GovernorBackground::Handler+. Pass it an object and the name of the method
+   (as a symbol) that you wish to call on that object. Arguments to this
+   method are not currently supported.
+2. In your I18n settings, define entries for your method, for each finished
+   status (completed, failed, and killed). You'll have access in your entry to
+   the resource as well as any message passed from the background service.
+   (The default +#to_s+ for Article displays the title, as of Governor 0.3.1.)
+   For example, if your method were 'post_to_blogger', you might have the
+   following in your +config/locales/en.yml+ file:
+
+       en:
+         governor_background:
+           post_to_blogger_completed: '"%{resource}" was completed successfully.'
+           post_to_blogger_failed: '"%{resource}" could not be created: %{message}.'
+           post_to_blogger_killed: '"%{resource}" was interrupted: %{message}.'
+
+Please see governor_blogger[https://github.com/carpeliam/governor_blogger] as
+an example usage of *governor_background*.
 
 == Contributing to governor_background
  

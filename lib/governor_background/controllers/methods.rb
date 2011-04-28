@@ -9,7 +9,7 @@ module GovernorBackground
         finished_jobs = GovernorBackground::JobManager.finished_jobs
         unless finished_jobs.blank?
           flash[:governor_background] = finished_jobs.map do |job|
-            [job.status, t("#{job.method_name}_#{job.status}", :resource => job.resource, :message => job.message, :scope => :governor_background)]
+            [job.status, t("#{job.method_name}_#{job.status}", :resource => job.resource, :message => job.message, :default => [job.status, job.status.to_sym], :scope => :governor_background)]
           end
         end
       end

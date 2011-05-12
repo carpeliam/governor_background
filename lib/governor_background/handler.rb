@@ -1,16 +1,16 @@
 module GovernorBackground
   class Handler
     class << self
-      def run_in_background(object, method)
+      def run_in_background(object, method, arguments=[])
         job = if delayed_job?
-          Delayed::Job.new(object, method, ::Delayed::Job.enqueue(Delayed::Performer.new(object, method)))
+          Delayed::Job.new(object, method, ::Delayed::Job.enqueue(Delayed::Performer.new(object, method, arguments)))
         elsif resque?
           resource_key, id = object.class.name.tableize.to_sym, object.id
           if resque_with_status?
             require File.expand_path('../resque/performer_with_state',  __FILE__)
-            Resque::Job.new(object, method, Resque::PerformerWithState.create(:resource => resource_key, :id => id, :method_name => method))
+            Resque::Job.new(object, method, Resque::PerformerWithState.create(:resource => resource_key, :id => id, :method_name => method, :arguments => arguments))
           else
-            ::Resque.enqueue(Resque::Performer, resource_key, id, method)
+            ::Resque.enqueue(Resque::Performer, resource_key, id, method, arguments)
             nil # not much use in holding on to state if we can't track it
           end
         end

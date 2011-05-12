@@ -40,7 +40,7 @@ module GovernorBackground
       Handler.use_resque = true
       Handler.run_in_background(@article, :post)
       id = JobManager.jobs.first.id
-      Resque::PerformerWithState.should have_queued(id, {:resource => :articles, :id => @article.id, :method_name => :post}).in(:governor)
+      Resque::PerformerWithState.should have_queued(id, {:resource => :articles, :id => @article.id, :method_name => :post, :arguments => []}).in(:governor)
     end
   end
 end

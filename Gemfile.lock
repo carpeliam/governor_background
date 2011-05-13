@@ -1,7 +1,7 @@
 PATH
   remote: ./
   specs:
-    governor_background (0.2.1)
+    governor_background (0.2.2)
       governor
 
 GEM

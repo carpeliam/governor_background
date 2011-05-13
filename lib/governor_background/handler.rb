@@ -1,7 +1,7 @@
 module GovernorBackground
   class Handler
     class << self
-      def run_in_background(object, method, arguments=[])
+      def run_in_background(object, method, *arguments)
         job = if delayed_job?
           Delayed::Job.new(object, method, ::Delayed::Job.enqueue(Delayed::Performer.new(object, method, arguments)))
         elsif resque?

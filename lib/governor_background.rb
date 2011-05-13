@@ -12,7 +12,7 @@ background = Governor::Plugin.new('background')
 background.register_model_callback do |base|
   module InstanceMethods
     private
-    def run_in_background(method, arguments=[])
+    def run_in_background(method, *arguments)
       GovernorBackground::Handler.run_in_background self, method, arguments
     end
   end

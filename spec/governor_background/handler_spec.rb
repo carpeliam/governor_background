@@ -42,5 +42,12 @@ module GovernorBackground
       id = JobManager.jobs.first.id
       Resque::PerformerWithState.should have_queued(id, {:resource => :articles, :id => @article.id, :method_name => :post, :arguments => []}).in(:governor)
     end
+    
+    it "can accept any number of arguments" do
+      Handler.use_resque = true
+      Handler.run_in_background(@article, :post, 1, 2, 3)
+      id = JobManager.jobs.first.id
+      Resque::PerformerWithState.should have_queued(id, {:resource => :articles, :id => @article.id, :method_name => :post, :arguments => [1, 2, 3]}).in(:governor)
+    end
   end
 end

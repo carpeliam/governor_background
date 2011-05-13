@@ -3,7 +3,7 @@ module GovernorBackground
     class Performer
       @queue = :governor
 
-      def self.perform(resource, id, method_name, arguments=[])
+      def self.perform(resource, id, method_name, *arguments)
         article = Governor.resources[resource].to.find(id)
         if arguments.blank?
           article.send(method_name)

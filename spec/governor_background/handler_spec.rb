@@ -30,24 +30,34 @@ module GovernorBackground
       @article = Factory(:article, :author => Factory(:user))
     end
     
-    it "adds delayed jobs successfully" do
-      expect {
+    context "delayed_job" do
+      it "adds jobs successfully" do
+        expect {
+          Handler.run_in_background(@article, :post)
+        }.to change { ::Delayed::Job.count }.by 1
+      end
+      
+      it "handles any number of arguments" do
+        Handler.run_in_background(@article, :post, 1, 2, 3)
+        performer = YAML.load ::Delayed::Job.first.handler
+        performer.arguments.should == [1, 2, 3]
+      end
+    end
+    
+    context "resque" do
+      it "adds jobs successfully" do
+        Handler.use_resque = true
         Handler.run_in_background(@article, :post)
-      }.to change { ::Delayed::Job.count }.by 1
-    end
+        id = JobManager.jobs.first.id
+        Resque::PerformerWithState.should have_queued(id, {:resource => :articles, :id => @article.id, :method_name => :post, :arguments => []}).in(:governor)
+      end
     
-    it "adds resque jobs successfully" do
-      Handler.use_resque = true
-      Handler.run_in_background(@article, :post)
-      id = JobManager.jobs.first.id
-      Resque::PerformerWithState.should have_queued(id, {:resource => :articles, :id => @article.id, :method_name => :post, :arguments => []}).in(:governor)
-    end
-    
-    it "can accept any number of arguments" do
-      Handler.use_resque = true
-      Handler.run_in_background(@article, :post, 1, 2, 3)
-      id = JobManager.jobs.first.id
-      Resque::PerformerWithState.should have_queued(id, {:resource => :articles, :id => @article.id, :method_name => :post, :arguments => [1, 2, 3]}).in(:governor)
+      it "can accept any number of arguments" do
+        Handler.use_resque = true
+        Handler.run_in_background(@article, :post, 1, 2, 3)
+        id = JobManager.jobs.first.id
+        Resque::PerformerWithState.should have_queued(id, {:resource => :articles, :id => @article.id, :method_name => :post, :arguments => [1, 2, 3]}).in(:governor)
+      end
     end
   end
 end

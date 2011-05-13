@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = %q{governor_background}
-  s.version = "0.2.0"
+  s.version = "0.2.1"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Liam Morley"]
-  s.date = %q{2011-05-12}
+  s.date = %q{2011-05-13}
   s.description = %q{A middle-tier plugin for the Rails 3-based Governor blogging system, allowing you to tie in additional services that might want to perform blog-related services in the background.}
   s.email = %q{liam@carpeliam.com}
   s.extra_rdoc_files = [

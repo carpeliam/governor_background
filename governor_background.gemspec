@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = %q{governor_background}
-  s.version = "0.2.2"
+  s.version = "0.3.0"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Liam Morley"]
-  s.date = %q{2011-05-13}
+  s.date = %q{2011-05-15}
   s.description = %q{A middle-tier plugin for the Rails 3-based Governor blogging system, allowing you to tie in additional services that might want to perform blog-related services in the background.}
   s.email = %q{liam@carpeliam.com}
   s.extra_rdoc_files = [
@@ -37,11 +37,13 @@ Gem::Specification.new do |s|
     "lib/governor_background/resque/job.rb",
     "lib/governor_background/resque/performer.rb",
     "lib/governor_background/resque/performer_with_state.rb",
+    "lib/governor_background/resque/resource.rb",
     "spec/governor_background/delayed/job_spec.rb",
     "spec/governor_background/handler_spec.rb",
     "spec/governor_background/job_manager_spec.rb",
     "spec/governor_background/resque/performer_spec.rb",
     "spec/governor_background/resque/performer_with_state_spec.rb",
+    "spec/governor_background/resque/resource_spec.rb",
     "spec/governor_background_spec.rb",
     "spec/rails_app/.gitignore",
     "spec/rails_app/Gemfile",
@@ -114,6 +116,7 @@ Gem::Specification.new do |s|
     "spec/governor_background/job_manager_spec.rb",
     "spec/governor_background/resque/performer_spec.rb",
     "spec/governor_background/resque/performer_with_state_spec.rb",
+    "spec/governor_background/resque/resource_spec.rb",
     "spec/governor_background_spec.rb",
     "spec/rails_app/app/controllers/application_controller.rb",
     "spec/rails_app/app/controllers/home_controller.rb",
@@ -158,6 +161,7 @@ Gem::Specification.new do |s|
       s.add_development_dependency(%q<factory_girl>, ["~> 2.0.0.beta"])
       s.add_development_dependency(%q<factory_girl_rails>, ["~> 1.1.beta"])
       s.add_development_dependency(%q<activerecord-nulldb-adapter>, [">= 0"])
+      s.add_development_dependency(%q<json>, [">= 0"])
       s.add_development_dependency(%q<will_paginate>, ["~> 3.0.beta"])
       s.add_development_dependency(%q<devise>, [">= 0"])
       s.add_development_dependency(%q<governor_background>, [">= 0"])
@@ -175,6 +179,7 @@ Gem::Specification.new do |s|
       s.add_dependency(%q<factory_girl>, ["~> 2.0.0.beta"])
       s.add_dependency(%q<factory_girl_rails>, ["~> 1.1.beta"])
       s.add_dependency(%q<activerecord-nulldb-adapter>, [">= 0"])
+      s.add_dependency(%q<json>, [">= 0"])
       s.add_dependency(%q<will_paginate>, ["~> 3.0.beta"])
       s.add_dependency(%q<devise>, [">= 0"])
       s.add_dependency(%q<governor_background>, [">= 0"])
@@ -193,6 +198,7 @@ Gem::Specification.new do |s|
     s.add_dependency(%q<factory_girl>, ["~> 2.0.0.beta"])
     s.add_dependency(%q<factory_girl_rails>, ["~> 1.1.beta"])
     s.add_dependency(%q<activerecord-nulldb-adapter>, [">= 0"])
+    s.add_dependency(%q<json>, [">= 0"])
     s.add_dependency(%q<will_paginate>, ["~> 3.0.beta"])
     s.add_dependency(%q<devise>, [">= 0"])
     s.add_dependency(%q<governor_background>, [">= 0"])

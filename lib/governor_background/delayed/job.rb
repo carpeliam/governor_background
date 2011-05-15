@@ -35,7 +35,7 @@ module GovernorBackground
         return 'working' if job_working?(job)
         return 'completed' if job_completed?(job)
         return 'failed' if job_failed?(job)
-        raise 'Status unknown.' # we should never get here.
+        return 'unknown'
       end
       
       def message

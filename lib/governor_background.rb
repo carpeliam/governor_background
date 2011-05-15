@@ -17,7 +17,7 @@ end
 module GovernorBackground
   @@blocks = {}
   def self.register(job_name, &block)
-    @@blocks[job_name.to_sym] = block
+    @@blocks[job_name.to_s] = block
   end
   
   def self.run(job_name, *arguments)
@@ -25,6 +25,6 @@ module GovernorBackground
   end
   
   def self.retrieve(job_name)
-    @@blocks[job_name.to_sym]
+    @@blocks[job_name.to_s]
   end
 end

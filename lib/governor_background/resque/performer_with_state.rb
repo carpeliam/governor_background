@@ -1,6 +1,7 @@
 require 'resque/job_with_status'
 module GovernorBackground
   module Resque
+    # Used when the resque-status gem has been installed.
     class PerformerWithState < ::Resque::JobWithStatus
       def self.queue
         :governor

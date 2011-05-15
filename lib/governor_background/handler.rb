@@ -1,6 +1,8 @@
 module GovernorBackground
   class Handler
     class << self
+      # Handles incoming jobs, routes them to Delayed_Job or Resque (whichever
+      # one is installed within the app), and adds them to the +JobManager+.
       def run_in_background(job_name, *arguments)
         job = if delayed_job?
           Delayed::Job.new(job_name, ::Delayed::Job.enqueue(Delayed::Performer.new(job_name, arguments)))

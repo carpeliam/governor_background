@@ -14,13 +14,7 @@ module GovernorBackground
   
   module Resque
     class Job
-      attr_reader :resource, :method_name, :id, :created_at # make ID accessible for testing
-      def initialize(resource, method_name, job_id)
-        @resource = resource
-        @method_name = method_name
-        @id = job_id
-        @created_at = Time.now
-      end
+      attr_reader :name, :id, :created_at # make ID accessible for testing
     end
   end
   
@@ -33,12 +27,12 @@ module GovernorBackground
     context "delayed_job" do
       it "adds jobs successfully" do
         expect {
-          Handler.run_in_background(@article, :post)
+          Handler.run_in_background(:job_name)
         }.to change { ::Delayed::Job.count }.by 1
       end
       
       it "handles any number of arguments" do
-        Handler.run_in_background(@article, :post, 1, 2, 3)
+        Handler.run_in_background(:job_name, 1, 2, 3)
         performer = YAML.load ::Delayed::Job.first.handler
         performer.arguments.should == [1, 2, 3]
       end
@@ -47,16 +41,16 @@ module GovernorBackground
     context "resque" do
       it "adds jobs successfully" do
         Handler.use_resque = true
-        Handler.run_in_background(@article, :post)
+        Handler.run_in_background(:job_name)
         id = JobManager.jobs.first.id
-        Resque::PerformerWithState.should have_queued(id, {:resource => :articles, :id => @article.id, :method_name => :post, :arguments => []}).in(:governor)
+        Resque::PerformerWithState.should have_queued(id, {:job_name => :job_name, :arguments => []}).in(:governor)
       end
     
       it "can accept any number of arguments" do
         Handler.use_resque = true
-        Handler.run_in_background(@article, :post, 1, 2, 3)
+        Handler.run_in_background(:job_name, 1, 2, 3)
         id = JobManager.jobs.first.id
-        Resque::PerformerWithState.should have_queued(id, {:resource => :articles, :id => @article.id, :method_name => :post, :arguments => [1, 2, 3]}).in(:governor)
+        Resque::PerformerWithState.should have_queued(id, {:job_name => :job_name, :arguments => [1, 2, 3]}).in(:governor)
       end
     end
   end

@@ -1,10 +1,9 @@
 module GovernorBackground
   module Delayed
     class Job
-      attr_reader :resource, :method_name, :created_at
-      def initialize(resource, method_name, job)
-        @resource = resource
-        @method_name = method_name
+      attr_reader :name, :created_at
+      def initialize(name, job)
+        @name = name
         @id = job.try(:id)
         @created_at = Time.now
       end

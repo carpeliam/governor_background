@@ -1,3 +1,4 @@
+require 'resque/job_with_status'
 module GovernorBackground
   module Resque
     class PerformerWithState < ::Resque::JobWithStatus
@@ -6,15 +7,9 @@ module GovernorBackground
       end
       
       def perform
-        resource = options['resource']
-        id = options['id']
-        method_name = options['method_name']
-        article = Governor.resources[resource].to.find(id)
-        if options.has_key?('arguments') && options['arguments'].present?
-          article.send(method_name, arguments)
-        else
-          article.send(method_name)
-        end
+        job_name = options['job_name']
+        arguments = options['arguments']
+        GovernorBackground.retrieve(job_name).call(*arguments)
       end
     end
   end

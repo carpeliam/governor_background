@@ -18,7 +18,7 @@ module GovernorBackground
       
       it "has a status of completed if it can't be found" do
         ::Delayed::Job.expects(:find_by_id).with(article.id).at_least_once.returns nil
-        job = Job.new(article, :post, stub(:id => article.id))
+        job = Job.new(:job_name, stub(:id => article.id))
         job.should be_completed
         job.status.should == 'completed'
       end
@@ -40,7 +40,7 @@ module GovernorBackground
       private
       def get_job_for(delayed_job)
         ::Delayed::Job.expects(:find_by_id).with(delayed_job.id).at_least_once.returns delayed_job
-        Job.new(article, :post, delayed_job)
+        Job.new(:job_name, delayed_job)
       end
     end
   end

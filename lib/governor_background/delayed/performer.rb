@@ -1,16 +1,8 @@
 module GovernorBackground
   module Delayed
-    class Performer < Struct.new(:article, :method_name, :arguments)
+    class Performer < Struct.new(:job_name, :arguments)
       def perform
-        if arguments.blank?
-          article.send(method_name)
-        else
-          article.send(method_name, *arguments)
-        end
-      end
-    
-      def error(job, exception)
-        # handle failure
+        GovernorBackground.retrieve(job_name).call(*arguments)
       end
     end
   end

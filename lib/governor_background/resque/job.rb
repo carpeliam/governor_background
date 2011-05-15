@@ -1,10 +1,9 @@
-module Governor
+module GovernorBackground
   module Resque
     class Job
-      attr_reader :resource, :method_name, :created_at
-      def initialize(resource, method_name, job_id)
-        @resource = resource
-        @method_name = method_name
+      attr_reader :name, :created_at
+      def initialize(name, job_id)
+        @name = name
         @id = job_id
         @created_at = Time.now
       end
@@ -40,7 +39,7 @@ module Governor
       
       private
       def resque_status
-        Resque::Status.get(@id)
+        ::Resque::Status.get(@id)
       end
       
       def proxy(method, default=false)

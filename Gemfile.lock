@@ -154,6 +154,7 @@ DEPENDENCIES
   governor
   governor_background!
   jeweler (~> 1.5.2)
+  json
   mocha
   resque
   resque-status

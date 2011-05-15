@@ -5,14 +5,15 @@ Blagojevich) is the pluggable blogging platform for Rails, built for people
 who want to build their blog into their website, not build their website into
 their blog.
 
-*governor_background* is a middle-tier plugin for Governor, allowing you to
-tie in additional services that might want to perform blog-related services in
-the background. For example, you may want to copy your articles to another
-blog service, like Blogger.
+*governor_background* plays nicely with Governor, allowing you to tie in
+additional services that might want to perform blog-related services in the
+background. For example, you may want to tweet a link to your article when
+publishing.
 
 == Dependencies
 
-* Governor[http://carpeliam.github.com/governor/]
+* Governor[http://carpeliam.github.com/governor/], although this dependency
+  might be removed. GovernorBackground is pretty independent.
 * Either Delayed_Job[https://github.com/collectiveidea/delayed_job] or
   Resque[https://github.com/defunkt/resque]. If you use Resque, it's highly
   recommended that you use
@@ -47,31 +48,40 @@ class, and within that div will be one or more divs with either a 'completed',
 
 == Usage
 
-*governor_background* adds a method <code>#run_in_background</code> to your
-resource class (by default, the +Article+ class, but this will be any resource
-class). To do the same thing from outside of your resource instance, you can
-call <code>GovernorBackground::Handler.run_in_background(object,
-:method_name)</code>. In order to build on top of *governor_background*,
-you'll need to do one of two things:
+Background jobs happen in two stages in governor_background: first, they get
+*registered*, then they get *run*.
 
-1. Call +run_in_background+, either from your resource instance or on
-   <code>GovernorBackground::Handler</code>. Pass it an object and the name of the
-   method (as a symbol) that you wish to call on that object. Arguments to
-   this method are not currently supported.
-2. In your I18n settings, define entries for your method, for each finished
-   status (completed, failed, and killed). You'll have access in your entry to
-   the resource as well as any message passed from the background service.
-   (The default <code>#to_s</code> for Article displays the title, as of
-   Governor 0.3.1.) For example, if your method were 'post_to_blogger', you
-   might have the following in your <code>config/locales/en.yml</code> file:
+1. *register*: To register a job, you give it a name and call
+   <code>GovernorBackground.register</code>:
+   
+       GovernorBackground.register('twitter_post') do |content|
+         Twitter.update(content)
+       end
+   
+   You'll want to do this once when the application is first started.
+2. *run*: When you're ready to run your background task, call
+   <code>GovernorBackground.run</code>:
+   
+       GovernorBackground.run('twitter_post', 'I am so awesome')
+   
+   GovernorBackground will look for a task registered as +twitter_post+ and
+   run its associated block, including any arguments you passed to +run+.
 
-       en:
-         governor_background:
-           post_to_blogger_completed: '"%{resource}" was completed successfully.'
-           post_to_blogger_failed: '"%{resource}" could not be created: %{message}.'
-           post_to_blogger_killed: '"%{resource}" was interrupted: %{message}.'
+Job names have to be _globally unique_; a good practice can be to preface your
+job name with the name of your plugin and an underscore.
 
-Please see governor_blogger[https://github.com/carpeliam/governor_blogger] as
+In your I18n settings, add an entry for your job name for each finished status
+(completed, failed, and killed). You'll have access in your entry to any
+message passed from the background service. For the above example, you might
+have the following in your <code>config/locales/en.yml</code> file:
+
+    en:
+      governor_background:
+        twitter_post_completed: 'Your article was successfully posted to Twitter.'
+        twitter_post_failed: 'Unable to tweet your article: %{message}.'
+        twitter_post_killed: 'Your tweet was interrupted: %{message}.'
+
+Please see governor_twitter[https://github.com/carpeliam/governor_twitter] as
 an example usage of *governor_background*.
 
 == Contributing to governor_background

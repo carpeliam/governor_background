@@ -1,20 +1,20 @@
-require 'governor_background/rails'
-require 'governor_background/handler'
-require 'governor_background/job_manager'
-require 'governor_background/delayed/job'
-require 'governor_background/delayed/performer'
-require 'governor_background/resque/job'
-require 'governor_background/resque/performer'
-require 'governor_background/resque/resource'
-require 'governor_background/controllers/methods'
-
-begin
-  require 'governor_background/resque/performer_with_state'
-rescue LoadError
-  $stderr.puts 'resque-status gem not installed, GovernorBackground resque jobs unable to report status'
-end
-
 module GovernorBackground
+  autoload :Handler, 'governor_background/handler'
+  autoload :JobManager, 'governor_background/job_manager'
+  module Delayed
+    autoload :Job, 'governor_background/delayed/job'
+    autoload :Performer, 'governor_background/delayed/performer'
+  end
+  module Resque
+    autoload :Job, 'governor_background/resque/job'
+    autoload :Resource, 'governor_background/resque/resource'
+    autoload :Performer, 'governor_background/resque/performer'
+    autoload :PerformerWithState, 'governor_background/resque/performer_with_state'
+  end
+  module Controllers
+    autoload :Methods, 'governor_background/controllers/methods'
+  end
+  
   @@blocks = {}
   # Registers this job to be run later. Must be called upon application
   # initialization.
@@ -49,3 +49,5 @@ module GovernorBackground
     @@blocks[job_name.to_s]
   end
 end
+
+require 'governor_background/rails'
